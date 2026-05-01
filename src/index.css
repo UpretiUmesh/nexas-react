@@ -1603,3 +1603,238 @@ svg[data-lucide], .lucide {
   .pm-topbar { flex-wrap: wrap; gap: .75rem; }
   .pm-iframe-outer { padding: 1rem; }
 }
+
+/* ================================================================
+   Card Live Thumbnail
+   ================================================================ */
+
+.card-thumb-wrap {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  background: #0e0e0e;
+  overflow: hidden;
+}
+
+.card-thumb-loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.card-thumb-spinner {
+  width: 24px;
+  height: 24px;
+  border: 2px solid rgba(255,255,255,.1);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+}
+
+/* Mini browser chrome on card */
+.card-browser-chrome {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .35rem .6rem;
+  background: #1a1a1a;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+  flex-shrink: 0;
+  z-index: 1;
+}
+
+.card-browser-dots {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.card-browser-dots span {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.15);
+}
+
+.card-browser-dots span:nth-child(1) { background: #ff5f57; }
+.card-browser-dots span:nth-child(2) { background: #febc2e; }
+.card-browser-dots span:nth-child(3) { background: #28c840; }
+
+.card-browser-bar {
+  flex: 1;
+  background: rgba(255,255,255,.06);
+  border-radius: 4px;
+  padding: .18rem .5rem;
+  font-size: .6rem;
+  color: rgba(255,255,255,.3);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Iframe inside card */
+.card-iframe-wrap {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  pointer-events: none;
+  background: #fff;
+}
+
+.card-iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1280px;
+  height: 1024px;
+  border: none;
+  display: block;
+  transform-origin: top left;
+  pointer-events: none;
+}
+
+/* Scale for wide cards */
+.work-card-wide .card-iframe {
+  transform: scale(0.36);
+}
+
+/* ================================================================
+   Modal Hero — Browser + Phone Device Mockups
+   ================================================================ */
+
+.pm-hero-devices {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 2rem;
+  padding: 2rem 3rem 0;
+  overflow: hidden;
+}
+
+/* Browser mockup */
+.pm-browser-mockup {
+  flex: 1;
+  max-width: 680px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px 10px 0 0;
+  overflow: hidden;
+  box-shadow: 0 -8px 40px rgba(0,0,0,.6);
+  border: 1px solid rgba(255,255,255,.1);
+  border-bottom: none;
+  height: 260px;
+}
+
+.pm-browser-chrome {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .5rem .75rem;
+  background: #1e1e1e;
+  flex-shrink: 0;
+}
+
+.pm-browser-dots {
+  display: flex;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+.pm-browser-dots span {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
+
+.pm-browser-dots span:nth-child(1) { background: #ff5f57; }
+.pm-browser-dots span:nth-child(2) { background: #febc2e; }
+.pm-browser-dots span:nth-child(3) { background: #28c840; }
+
+.pm-browser-bar {
+  flex: 1;
+  background: rgba(255,255,255,.07);
+  border-radius: 5px;
+  padding: .22rem .7rem;
+  font-size: .68rem;
+  color: rgba(255,255,255,.35);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pm-browser-screen {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  background: #fff;
+}
+
+/* Phone mockup */
+.pm-phone-mockup {
+  width: 110px;
+  flex-shrink: 0;
+  align-self: flex-end;
+}
+
+.pm-phone-shell {
+  width: 110px;
+  height: 220px;
+  background: #1a1a1a;
+  border-radius: 20px;
+  border: 2px solid rgba(255,255,255,.12);
+  padding: 10px 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-shadow: 0 -8px 30px rgba(0,0,0,.5);
+  position: relative;
+}
+
+.pm-phone-notch {
+  width: 36px;
+  height: 6px;
+  background: rgba(255,255,255,.15);
+  border-radius: 3px;
+  margin: 0 auto;
+  flex-shrink: 0;
+}
+
+.pm-phone-screen-wrap {
+  flex: 1;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #fff;
+  position: relative;
+}
+
+/* Shared iframe for modal hero */
+.pm-hero-iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1280px;
+  border: none;
+  display: block;
+  transform-origin: top left;
+  pointer-events: none;
+}
+
+.pm-hero-iframe-mobile {
+  width: 390px;
+  transform-origin: top left;
+  pointer-events: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .pm-phone-mockup { display: none; }
+  .pm-browser-mockup { max-width: 100%; height: 200px; }
+  .pm-hero-devices { padding: 1.5rem 1.5rem 0; gap: 1rem; }
+  .card-iframe { transform: scale(0.22); }
+}

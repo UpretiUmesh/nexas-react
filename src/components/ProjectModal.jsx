@@ -1,5 +1,32 @@
-import { useEffect, useRef, useState } from 'react'
+  import { useEffect, useRef, useState } from 'react'
 import { X, ExternalLink, ArrowRight, Monitor, Tablet, Smartphone, RefreshCw, Globe, ArrowLeft, ArrowUpRight } from 'lucide-react'
+
+// Scale an iframe to fill its container
+function useIframeScale(iframeWidth = 1280) {
+  const wrapRef = useRef(null)
+  const iframeRef = useRef(null)
+
+  useEffect(() => {
+    const el = wrapRef.current
+    const iframe = iframeRef.current
+    if (!el || !iframe) return
+
+    const update = () => {
+      const w = el.offsetWidth
+      const h = el.offsetHeight
+      const scale = w / iframeWidth
+      iframe.style.transform = `scale(${scale})`
+      iframe.style.height = `${Math.ceil(h / scale)}px`
+    }
+
+    update()
+    const ro = new ResizeObserver(update)
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [iframeWidth])
+
+  return { wrapRef, iframeRef }
+}
 
 const DEVICES = [
   { id: 'desktop', Icon: Monitor,    label: 'Desktop', width: '100%' },
@@ -7,8 +34,7 @@ const DEVICES = [
   { id: 'mobile',  Icon: Smartphone, label: 'Mobile',  width: '390px' },
 ]
 
-function LivePreview({ url }) {
-  const [device, setDevice] = useState('desktop')
+function LivePreview({ url }) {  const [device, setDevice] = useState('desktop')
   const [loaded, setLoaded] = useState(false)
   const [key, setKey] = useState(0)
   const currentDevice = DEVICES.find(d => d.id === device)
@@ -83,7 +109,9 @@ function LivePreview({ url }) {
 
 export default function ProjectModal({ project, onClose }) {
   const overlayRef = useRef(null)
-  const [tab, setTab] = useState('overview') // 'overview' | 'preview'
+  const [tab, setTab] = useState('overview')
+  const { wrapRef: browserWrapRef, iframeRef: browserIframeRef } = useIframeScale(1280)
+  const { wrapRef: phoneWrapRef,   iframeRef: phoneIframeRef   } = useIframeScale(390)
 
   // Close on Escape
   useEffect(() => {
@@ -138,40 +166,52 @@ export default function ProjectModal({ project, onClose }) {
             <>
               {/* Hero banner */}
               <div className="pm-hero" style={{ '--c1': c1, '--c2': c2 }}>
-                <div className="pm-hero-mock">
-                  {mock === 'brand' && (
-                    <div className="work-mock work-mock-brand">
-                      <div className="mock-logo-big">{letter}</div>
-                      <div className="mock-brand-lines"><span /><span /></div>
-                    </div>
-                  )}
-                  {mock === 'wide' && (
-                    <div className="work-mock work-mock-wide">
-                      <div className="mock-sidebar" />
-                      <div className="mock-main">
-                        <div className="mock-chart" />
-                        <div className="mock-stats-row"><span /><span /><span /></div>
+                {liveUrl ? (
+                  <div className="pm-hero-devices">
+                    {/* Desktop browser mockup */}
+                    <div className="pm-browser-mockup">
+                      <div className="pm-browser-chrome">
+                        <div className="pm-browser-dots"><span /><span /><span /></div>
+                        <div className="pm-browser-bar">{liveUrl.replace('https://','').replace('http://','')}</div>
+                      </div>
+                      <div className="pm-browser-screen" ref={browserWrapRef}>
+                        <iframe
+                          ref={browserIframeRef}
+                          src={liveUrl}
+                          title={title + ' desktop'}
+                          className="pm-hero-iframe"
+                          scrolling="no"
+                          sandbox="allow-scripts allow-same-origin"
+                          tabIndex={-1}
+                        />
                       </div>
                     </div>
-                  )}
-                  {mock === 'mobile' && (
-                    <div className="work-mock work-mock-mobile">
-                      <div className="mock-phone">
-                        <div className="mock-phone-screen">
-                          <div className="mock-ph-header" />
-                          <div className="mock-ph-content"><span /><span /><span /></div>
+                    {/* Phone mockup */}
+                    <div className="pm-phone-mockup">
+                      <div className="pm-phone-shell">
+                        <div className="pm-phone-notch" />
+                        <div className="pm-phone-screen-wrap" ref={phoneWrapRef}>
+                          <iframe
+                            ref={phoneIframeRef}
+                            src={liveUrl}
+                            title={title + ' mobile'}
+                            className="pm-hero-iframe pm-hero-iframe-mobile"
+                            scrolling="no"
+                            sandbox="allow-scripts allow-same-origin"
+                            tabIndex={-1}
+                          />
                         </div>
                       </div>
                     </div>
-                  )}
-                  {mock === 'default' && (
-                    <div className="work-mock">
-                      <div className="mock-bar" />
-                      <div className="mock-lines"><span /><span /><span /></div>
-                      <div className="mock-card-row"><span /><span /></div>
-                    </div>
-                  )}
-                </div>
+                  </div>
+                ) : (
+                  <div className="pm-hero-mock">
+                    {mock === 'brand' && <div className="work-mock work-mock-brand"><div className="mock-logo-big">{letter}</div><div className="mock-brand-lines"><span /><span /></div></div>}
+                    {mock === 'wide' && <div className="work-mock work-mock-wide"><div className="mock-sidebar" /><div className="mock-main"><div className="mock-chart" /><div className="mock-stats-row"><span /><span /><span /></div></div></div>}
+                    {mock === 'mobile' && <div className="work-mock work-mock-mobile"><div className="mock-phone"><div className="mock-phone-screen"><div className="mock-ph-header" /><div className="mock-ph-content"><span /><span /><span /></div></div></div></div>}
+                    {mock === 'default' && <div className="work-mock"><div className="mock-bar" /><div className="mock-lines"><span /><span /><span /></div><div className="mock-card-row"><span /><span /></div></div>}
+                  </div>
+                )}
                 <div className="pm-hero-overlay">
                   <span className="pm-hero-cat">{cat}</span>
                   <h1 className="pm-hero-title">{title}</h1>
