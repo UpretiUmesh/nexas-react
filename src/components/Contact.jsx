@@ -2,8 +2,8 @@ import { useState } from 'react'
 import { Mail, Phone, MapPin, Clock, Linkedin, Twitter, Instagram, Dribbble, Github, User, Building2, DollarSign, Layers, MessageSquare, Send, CheckCircle2 } from 'lucide-react'
 
 const contactItems = [
-  { Icon: Mail,    label: 'Email',         content: <a href="mailto:hello@yourstudio.com">hello@yourstudio.com</a> },
-  { Icon: Phone,   label: 'Phone',         content: <a href="tel:+919876543210">+91 98765 43210</a> },
+  { Icon: Mail,    label: 'Email',         content: <a href="mailto:contact@codevora.in">contact@codevora.in</a> },
+  { Icon: Phone,   label: 'Phone',         content: <a href="tel:+919877112658">+91 9877112658</a> },
   { Icon: MapPin,  label: 'Office',        content: <span>Phase 8B, Industrial Area<br />Mohali, Punjab 160071</span> },
   { Icon: Clock,   label: 'Working Hours', content: <span>Mon – Sat, 9:00 AM – 6:00 PM IST</span> },
 ]
