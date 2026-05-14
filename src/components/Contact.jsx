@@ -16,15 +16,53 @@ const socials = [
   { Icon: Github,    href: 'https://github.com',    label: 'GitHub' },
 ]
 
+function getContactEndpoint() {
+  if (import.meta.env.VITE_CONTACT_ENDPOINT) return import.meta.env.VITE_CONTACT_ENDPOINT
+  if (window.location.pathname.includes('/dist/')) return './contact.php'
+  return '/api/contact'
+}
+
 export default function Contact() {
   const [submitted, setSubmitted] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [error, setError] = useState('')
   const [form, setForm] = useState({ name: '', email: '', company: '', budget: '', service: '', message: '' })
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    if (!form.name.trim() || !form.email.trim() || !form.message.trim()) return
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) return
-    setSubmitted(true)
+    setError('')
+
+    if (!form.name.trim() || !form.email.trim() || !form.message.trim()) {
+      setError('Please fill in your name, email, and project details.')
+      return
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+      setError('Please enter a valid email address.')
+      return
+    }
+
+    setIsSubmitting(true)
+
+    try {
+      const response = await fetch(getContactEndpoint(), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      })
+      const result = await response.json().catch(() => ({}))
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.message || 'Unable to send your message right now.')
+      }
+
+      setSubmitted(true)
+      setForm({ name: '', email: '', company: '', budget: '', service: '', message: '' })
+    } catch (err) {
+      setError(err.message || 'Unable to send your message right now.')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -32,10 +70,10 @@ export default function Contact() {
       <div className="container">
         <div className="contact-grid">
           <div className="contact-info">
-            <div className="section-tag reveal-up">Get In Touch</div>
-            <h2 className="section-title reveal-up">Let's create something <span className="text-gradient">great</span></h2>
-            <p className="about-text reveal-up">Have a project in mind? We'd love to hear about it. Drop us a message and we'll get back to you within 24 hours.</p>
-            <div className="contact-details reveal-up">
+            <div className="section-label">Get In Touch</div>
+            <h2 className="display-title">Let's create something <span className="text-accent">great</span></h2>
+            <p className="about-text">Have a project in mind? We'd love to hear about it. Drop us a message and we'll get back to you within 24 hours.</p>
+            <div className="contact-details">
               {contactItems.map(({ Icon, label, content }) => (
                 <div className="contact-item" key={label}>
                   <div className="contact-icon-wrap"><Icon size={18} /></div>
@@ -43,7 +81,7 @@ export default function Contact() {
                 </div>
               ))}
             </div>
-            <div className="social-links reveal-up">
+            <div className="social-links">
               {socials.map(({ Icon, href, label }) => (
                 <a key={label} href={href} target="_blank" rel="noopener" className="social-link magnetic" aria-label={label}>
                   <Icon size={18} />
@@ -52,7 +90,7 @@ export default function Contact() {
             </div>
           </div>
 
-          <div className="contact-form-wrap reveal-right">
+          <div className="contact-form-wrap">
             {submitted ? (
               <div className="form-success">
                 <div className="success-icon"><CheckCircle2 size={56} stroke="#22c55e" /></div>
@@ -102,8 +140,9 @@ export default function Contact() {
                   <label htmlFor="message"><MessageSquare size={14} /> Tell Us About Your Project</label>
                   <textarea id="message" rows="5" placeholder="Describe your project, goals, timeline..." required value={form.message} onChange={e => setForm(f => ({ ...f, message: e.target.value }))}></textarea>
                 </div>
-                <button type="submit" className="btn btn-primary btn-full magnetic">
-                  <Send size={16} /> Send Message
+                {error && <p className="form-error">{error}</p>}
+                <button type="submit" className="btn btn-primary btn-full magnetic" disabled={isSubmitting}>
+                  <Send size={16} /> {isSubmitting ? 'Sending...' : 'Send Message'}
                 </button>
               </form>
             )}
