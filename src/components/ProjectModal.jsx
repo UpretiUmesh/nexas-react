@@ -1,4 +1,4 @@
-  import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { X, ExternalLink, ArrowRight, Monitor, Tablet, Smartphone, RefreshCw, Globe, ArrowLeft, ArrowUpRight } from 'lucide-react'
 
 // Scale an iframe to fill its container

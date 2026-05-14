@@ -41,7 +41,10 @@ export default function Services() {
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true })
+    let renderer, rafId
+    try {
+      renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true })
+    } catch (e) { return }
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     renderer.setClearColor(0x000000, 0)
     const scene = new THREE.Scene()
@@ -67,7 +70,7 @@ export default function Services() {
       mesh.rotation.x = 0.5 * (i + 1); mesh.rotation.y = 0.3 * (i + 1)
       group.add(mesh); return mesh
     })
-    const clock = new THREE.Clock(); let rafId
+    const clock = new THREE.Clock()
     const animate = () => {
       rafId = requestAnimationFrame(animate)
       const t = clock.getElapsedTime()

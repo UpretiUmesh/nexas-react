@@ -84,6 +84,22 @@ const projects = [
     ],
   },
   {
+    category: 'web', c1: '#b45309', c2: '#92400e', mock: 'default',
+    cat: 'Speed Optimisation + SEO',
+    title: 'IC² Institute — UT Austin',
+    desc: 'Performance optimisation and SEO improvements for the IC² Institute at UT Austin — a globally respected research institute focused on AI and healthcare innovation.',
+    fullDesc: 'The IC² Institute at the University of Texas at Austin is a globally respected research institute founded in 1977, advancing responsible AI in healthcare and economic development. We were brought in to optimise their WordPress site for speed and SEO — conducting a full Core Web Vitals audit, fixing LCP and CLS issues, optimising images and scripts, implementing structured data, and improving their Blog/News section for search visibility. The result was a significantly faster, more discoverable platform for their research and publications.',
+    year: '2024', client: 'IC² Institute, UT Austin', role: 'Speed Optimisation + SEO',
+    tags: ['Speed Optimisation', 'SEO', 'Core Web Vitals', 'Blog / News', 'WordPress'],
+    techStack: ['WordPress', 'Yoast SEO', 'WP Rocket', 'Google Search Console', 'PageSpeed Insights'],
+    liveUrl: 'https://ic2.utexas.edu',
+    results: [
+      { value: 'A',    label: 'PageSpeed score' },
+      { value: 'Top',  label: 'Search rankings' },
+      { value: 'Live', label: 'Production site' },
+    ],
+  },
+  {
     category: 'web', c1: '#0f172a', c2: '#1e3a5f', mock: 'wide',
     cat: 'Fully Custom WordPress Theme + GSAP',
     title: 'ATX Web Designs',

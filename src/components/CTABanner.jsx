@@ -8,7 +8,10 @@ export default function CTABanner() {
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true })
+    let renderer, rafId
+    try {
+      renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true })
+    } catch (e) { return }
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     renderer.setClearColor(0x000000, 0)
     const scene = new THREE.Scene()
@@ -39,7 +42,7 @@ export default function CTABanner() {
       new THREE.MeshPhongMaterial({ color: 0x080808, wireframe: true, transparent: true, opacity: 0.2 })
     )
     scene.add(cMesh)
-    const clock = new THREE.Clock(); let rafId
+    const clock = new THREE.Clock()
     const animate = () => {
       rafId = requestAnimationFrame(animate)
       const t = clock.getElapsedTime()
